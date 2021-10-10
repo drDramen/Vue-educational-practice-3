@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import App from './App.vue';
 
-Vue.config.productionTip = false;
+import 'normalize.css';
+import '@/assets/sass/main.sass';
+// Vue.config.productionTip = false;
 
 new Vue({
   render: (h) => h(App),
