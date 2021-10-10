@@ -1,11 +1,28 @@
 <template>
   <div class="todo-list__wrapper">
-    <add-task class="block__wrapper" @createTask="addTask" />
-
-    <search-tasks class="block__wrapper" v-model="taskSearch" />
+    <div class="todo-list__header">
+      <add-task class="block__wrapper flex" @createTask="addTask" />
+      <search-tasks class="block__wrapper flex" v-model="taskSearch" />
+    </div>
+    <div class="tasks-list__header flex">
+      <h2 class="tasks-list__title">Список задач</h2>
+      <div v-if="totalPages > 1" class="tasks-list__nav tasks-list-nav flex">
+        <p class="tasks-list-nav__btn" @click="prevPage">Назад</p>
+        <p>страница {{ currentPage }} из {{ totalPages }}</p>
+        <p class="tasks-list-nav__btn" @click="nextPage">Вперед</p>
+      </div>
+    </div>
+    <div class="flex" style="flex-direction: column">
+      <p>Выполнено {{ totalCompletedTasks }}</p>
+      <label class="sort-complete">
+        <input type="checkbox" v-model="sortDirection" :disabled="!isCompletedTasks" />
+        <span v-if="sortDirection">Сначала выполненные</span>
+        <span v-else>Сначала не выполненные</span>
+      </label>
+    </div>
 
     <task-list
-      class="block__wrapper"
+      class="block__wrapper tasks-list__item"
       v-bind:tasksList="currentShowTasks"
       @deleted="deleteTask"
       @completed="completeTask"
@@ -35,7 +52,7 @@ export default {
   },
   computed: {
     sortedTasks() {
-      return [...this.tasks].sort((a) => (a.completed === this.sortDirection ? 1 : -1));
+      return [...this.tasks].sort((a) => (a.completed === this.sortDirection ? -1 : 1));
     },
     filterableTasks() {
       return this.sortedTasks.filter((t) => t.title.includes(this.taskSearch));
@@ -44,12 +61,15 @@ export default {
       const startIndex = (this.currentPage - 1) * this.limitOnPage;
       return this.filterableTasks.slice(startIndex, startIndex + this.limitOnPage);
     },
-    // totalPages() {
-    //   return Math.ceil(this.tasks.length / this.limit);
-    // },
-    // totalCompletedTasks() {
-    //   return this.sortedTasks.filter((t) => t.completed).length;
-    // },
+    totalPages() {
+      return Math.ceil(this.tasks.length / this.limitOnPage);
+    },
+    totalCompletedTasks() {
+      return this.sortedTasks.filter((t) => t.completed).length;
+    },
+    isCompletedTasks() {
+      return this.totalCompletedTasks > 0;
+    },
   },
   beforeMount() {
     const tasks = localStorage.getItem('tasks');
@@ -67,6 +87,9 @@ export default {
     },
     deleteTask(id) {
       this.tasks = this.tasks.filter((t) => t.id !== id);
+      if (this.currentPage > this.totalPages) {
+        this.currentPage--;
+      }
       this.saveTasksToLS();
     },
     completeTask(id) {
@@ -74,13 +97,52 @@ export default {
       this.tasks[taskIndex].completed = !this.tasks[taskIndex].completed;
       this.saveTasksToLS();
     },
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage += 1;
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage -= 1;
+    },
   },
 };
 </script>
 
 <style lang="sass">
-.todo-list__wrapper
-  padding: 50px 30px
+.todo-list
+  &__wrapper
+    padding: 50px 30px
+  &__header
+    margin-bottom: 50px
 .block__wrapper
+  padding: 20px 0
+.tasks-list
+  &__header
+    justify-content: space-between
+    margin-bottom: 30px
+    height: 56px
+    border-bottom: 2px solid #fff
+  &__title
+    position: relative
+    display: inline-block
+    font-size: 3.2rem
+    text-transform: uppercase
+  &__nav
+    justify-content: flex-end
+    align-items: baseline
+    & > p + p
+      margin-left: 20px
+  &-nav__btn
+    padding: 5px
+    font-size: 2.4rem
+    cursor: pointer
+    &:hover
+      text-decoration: underline
+
+.tasks-list__item
   padding: 20px
+
+.sort-complete
+  align-self: flex-start
+  input
+    margin-right: 5px
 </style>

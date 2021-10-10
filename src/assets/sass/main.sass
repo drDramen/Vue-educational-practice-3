@@ -2,9 +2,34 @@
   margin: 0
   padding: 0
   box-sizing: border-box
+
+html
+  font-size: 10px
+
+body
+  min-height: 100vh
+  font-size: 1.6rem
+  line-height: 1.5
+  color: #fff
+  background-color: #303F9F
+
 .container
   max-width: 1200px
   margin: 0 auto
 
+
 .flex
   display: flex
+
+.custom-input
+  flex-grow: 1
+  align-self: flex-end
+  padding: 0 15px
+  width: 100%
+  color: #fff
+  background-color: transparent
+  border: none
+  border-bottom: 2px solid #fff
+  outline: none
+  &:not(:last-child)
+    margin-right: 20px

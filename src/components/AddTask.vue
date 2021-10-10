@@ -1,7 +1,14 @@
 <template>
   <div class="task-create">
-    <input class="task-create__title" ref="input" type="text" v-model="taskTitle" @keydown.enter="createTask" />
-    <button :disabled="isEmpty" @click="createTask">Add</button>
+    <button class="task-create__btn" :disabled="isEmpty" @click="createTask">Добавить</button>
+    <input
+      class="custom-input"
+      ref="input"
+      type="text"
+      v-model="taskTitle"
+      @keydown.enter="createTask"
+      placeholder="Введите название задачи"
+    />
   </div>
 </template>
 
@@ -34,8 +41,11 @@ export default {
 </script>
 
 <style lang="sass">
-.task-create__title
-  background-color: transparent
-  border: none
-  border-bottom: 2px solid #fff
+.task-create
+  //justify-content: space-between
+  font-size: 3.2rem
+  &__btn
+    margin-right: 20px
+    padding: 10px 20px
+    text-transform: uppercase
 </style>

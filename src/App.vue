@@ -18,7 +18,4 @@ export default {
 };
 </script>
 
-<style lang="sass">
-#app
-  background-color: #303F9F
-</style>
+<style lang="sass"></style>
