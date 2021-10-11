@@ -14,13 +14,8 @@
     </div>
     <div class="flex" style="flex-direction: column">
       <p>Выполнено {{ totalCompletedTasks }}</p>
-      <label class="sort-complete">
-        <input type="checkbox" v-model="sortDirection" :disabled="!isCompletedTasks" />
-        <span v-if="sortDirection">Сначала выполненные</span>
-        <span v-else>Сначала не выполненные</span>
-      </label>
+      <sortby-completed :sortDirection.sync="sortDirection" v-bind:isCompletedTasks="isCompletedTasks" />
     </div>
-
     <task-list
       class="block__wrapper tasks-list__item"
       v-bind:tasksList="currentShowTasks"
@@ -34,12 +29,14 @@
 import TaskList from '@/components/TasksList';
 import AddTask from '@/components/AddTask.vue';
 import SearchTasks from '@/components/SearchTasks.vue';
+import SortbyCompleted from '@/components/SortbyCompleted.vue';
 
 export default {
   components: {
     TaskList,
     AddTask,
     SearchTasks,
+    SortbyCompleted,
   },
   data: function () {
     return {
@@ -113,8 +110,10 @@ export default {
     padding: 50px 30px
   &__header
     margin-bottom: 50px
+
 .block__wrapper
   padding: 20px 0
+
 .tasks-list
   &__header
     justify-content: space-between

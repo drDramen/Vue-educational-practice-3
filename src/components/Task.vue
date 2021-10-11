@@ -27,6 +27,7 @@ export default {
     flex-grow: 1
     margin-right: 20px
   &__complete
+    flex-shrink: 0
     margin-right: 20px
     width: 50px
     height: 50px
